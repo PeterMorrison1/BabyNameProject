@@ -10,6 +10,10 @@ def load_baby_names():
     data = pd.read_parquet('./data/fact_names.parquet')
     return data
 
+@st.cache
+def load_distinct_names(baby_names):
+    return baby_names['name'].drop_duplicates().sort_values()
+
 # st.set_page_config(layout="wide", page_title="Baby Name Project")
 st.title("Baby Name Project")
 st.sidebar.title("Baby Name Project")
@@ -17,6 +21,7 @@ st.sidebar.caption("by [PeterMorrison1](github.com/PeterMorrison1)")
 st.sidebar.write("This is to test the capabilities of Streamlit and explore baby name data.")
 
 baby_names = load_baby_names()
+distinct_names = load_distinct_names(baby_names)
 
 names_after_2019 = baby_names['year'] > 2019
 
@@ -45,7 +50,7 @@ else:
 AgGrid(filtered_df)
 
 
-name_select = st.selectbox("Pick a name to chart popularity", baby_names['name'].drop_duplicates().sort_values())
+name_select = st.selectbox("Pick a name to chart popularity", distinct_names)
 name_data = baby_names[baby_names['name'] == name_select]
 fig = px.histogram(name_data, x=name_data['year'], y=name_data['count'])
 st.plotly_chart(fig, use_container_width=True)
