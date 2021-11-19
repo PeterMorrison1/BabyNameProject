@@ -31,6 +31,7 @@ filtered_df = baby_names[year_range_filter]
 show_states = st.checkbox("Do you want to see individual states?")
 
 
+
 if show_states:
     filter_by_state = st.checkbox("Do you want to filter by state?")
     if filter_by_state:
@@ -42,3 +43,9 @@ else:
     filtered_df = filtered_df.groupby(['name', 'sex', 'year'], as_index=False).agg({'count':'sum'})
     filtered_df.sort_values(by=['year', 'sex', 'count', 'name'], inplace=True, ascending=False)
 AgGrid(filtered_df)
+
+
+name_select = st.selectbox("Pick a name to chart popularity", baby_names['name'].drop_duplicates().sort_values())
+name_data = baby_names[baby_names['name'] == name_select]
+fig = px.histogram(name_data, x=name_data['year'], y=name_data['count'])
+st.plotly_chart(fig, use_container_width=True)
