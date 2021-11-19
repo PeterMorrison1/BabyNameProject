@@ -49,8 +49,12 @@ else:
     filtered_df.sort_values(by=['year', 'sex', 'count', 'name'], inplace=True, ascending=False)
 AgGrid(filtered_df)
 
-
+st.header("Name Popularity by Year")
 name_select = st.selectbox("Pick a name to chart popularity", distinct_names)
 name_data = baby_names[baby_names['name'] == name_select]
 fig = px.histogram(name_data, x=name_data['year'], y=name_data['count'])
+st.plotly_chart(fig, use_container_width=True)
+
+st.write("Name popularity by Year and State")
+fig = px.line(name_data, x=name_data['year'], y=name_data['count'], color=name_data['prov_state_id'])
 st.plotly_chart(fig, use_container_width=True)
