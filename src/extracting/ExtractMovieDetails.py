@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+from ast import literal_eval
 
 temp_folder = './temp/'
 
@@ -37,7 +38,7 @@ df['actors'] = df['actors'].apply(lambda x: str(x).split(','))
 final = df.explode('actors').reset_index()
 final['year'] = final['year'].astype(str).astype(int)
 
-final.to_parquet('./data/movies.parquet')
+# final.to_parquet('./data/movies.parquet')
 
 # Merge to get the characters #! Need to match actor/actress to character 
 # title_principals['characters'].replace('', np.nan, inplace=True)
@@ -48,4 +49,23 @@ final.to_parquet('./data/movies.parquet')
 # final_merged = merged.explode('characters').reset_index()
 
 # print(final_merged)
-# final_merged.to_parquet('./data/movies_with_characters.parquet')
+
+df = title_principals.copy()
+
+
+df = df[['characters', 'imdb_title_id']]
+df.set_index(['imdb_title_id'])
+# df['characters'] = df['characters'].apply(lambda x: str(x).split(','))
+df.dropna(subset=['characters'], inplace=True)
+df['characters'] = df['characters'].apply(literal_eval)
+
+final = df.explode('characters').reset_index()
+# print(final)
+
+
+merged = pd.merge(final, movies[['imdb_title_id', 'year', 'title']], on='imdb_title_id', how='left')
+print("Merged")
+print(merged)
+
+# final['year'] = final['year'].astype(str).astype(int)
+merged.to_parquet('./data/movies_with_characters.parquet', index=True)

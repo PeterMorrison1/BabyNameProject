@@ -20,6 +20,12 @@ def load_movie_names():
     data = pd.read_parquet('./data/movies.parquet')
     return data
 
+@st.cache
+def load_character_names():
+    data = pd.read_parquet('./data/movies_with_characters.parquet')
+    return data
+
+
 # st.set_page_config(layout="wide", page_title="Baby Name Project")
 st.title("Baby Name Project")
 st.sidebar.title("Baby Name Project")
@@ -29,6 +35,7 @@ st.sidebar.write("This is to test the capabilities of Streamlit and explore baby
 baby_names = load_baby_names()
 distinct_names = load_distinct_names(baby_names)
 movies = load_movie_names()
+characters = load_character_names()
 
 names_after_2019 = baby_names['year'] > 2019
 
@@ -67,18 +74,25 @@ fig = px.line(name_data, x=name_data['year'], y=name_data['count'], color=name_d
 st.plotly_chart(fig, use_container_width=True)
 
 st.header("Actor/Movie comparison")
+
+# select and group by name/year
 selected_movie_filter = movies[movies['actors'].str.startswith(name_select)]
 grouped_movie_names = selected_movie_filter.groupby(['year']).size().reset_index(name='count')
-print(grouped_movie_names)
+
+
+
+selected_character_filter = characters[characters['characters'].str.startswith(name_select)]
+grouped_character_names = selected_character_filter.groupby(['year']).size().reset_index(name='count')
 
 AgGrid(selected_movie_filter)
+AgGrid(selected_character_filter)
 
-st.write('## Births and Theatrical Releases by year and name (birth and actor name)')
+st.write('## Births and Theatrical Releases by year and name (birth, actor, and character name)') 
 fig = go.Figure()
 fig.add_trace(go.Histogram(x=name_data['year'], y=name_data['count'], name='Births'))
-fig.add_trace(go.Histogram(x=grouped_movie_names['year'], y=grouped_movie_names['count'], name='Movie Releases'))
+fig.add_trace(go.Histogram(x=grouped_movie_names['year'], y=grouped_movie_names['count'], name=f'Actors starting with {name_select}'))
+fig.add_trace(go.Histogram(x=grouped_character_names['year'], y=grouped_character_names['count'], name=f'Characters starting with {name_select}'))
 fig.update_layout(barmode='overlay')
 fig.update_traces(opacity=0.75)
 st.plotly_chart(fig, use_container_width=True)
-# fig = px.histogram(name_data, x=name_data['year'], y=name_data['count'])
-# st.plotly_chart(fig, use_container_width=True)
+
