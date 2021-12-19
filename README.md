@@ -6,7 +6,7 @@ I currently have it extracting USA baby names by state, but I was thinking of po
 
 To run this project you should be able to clone the project, `pip install -r requirements` and run `streamlit run app.py`. To run the extracting code you would run the command `python setup.py install` then run the file `manual_download_usa_names.py` - this is because the extractor code is installed as a module.
 
-This project will be available through Streamlit cloud as it is a public repo [at this link](https://share.streamlit.io/petermorrison1/babynameproject/main/app.py).
+[This project will be available through Streamlit cloud as it is a public repo at this link](https://share.streamlit.io/petermorrison1/babynameproject/main/app.py).
 
 Overall, this project may get a few updates, but I wanted to constrain it to only a few days of work both as a challenge and for fun before starting on some other larger projects. 
 
