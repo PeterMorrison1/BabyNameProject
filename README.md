@@ -2,7 +2,7 @@
 
 This project is intended to be a fun side-project over the course of ~2 days to analyze baby names using Streamlit.
 
-I currently have it extracting USA baby names by state, but I was thinking of possibly introducing Canadian provinces (ones that supply baby names at least). Additionally, I added actors & characters from movies by year to compare with. I was thinking it would be interesting to see the popularity of "Leonardo" as a name and compare it to release dates of movies that star a Leonardo actor or character. This was mostly inspired by seeing the name Daenerys become popular around a year after the Game of Thrones show aired. 
+I currently have it extracting USA baby names by state, but I was thinking of possibly introducing Canadian provinces (ones that supply baby names at least). Additionally, I added actors & characters from movies by year to compare with. I was thinking it would be interesting to see the popularity of "Leonardo" as a name and compare it to release dates of movies that star a Leonardo actor or character. This was mostly inspired by seeing the name Daenerys become popular around a year after the Game of Thrones show aired. Other interesting ones I found were "Neo" and "Keanu" (along with more, but those are the ones that stood out the most as interesting).
 
 To run this project you should be able to clone the project, `pip install -r requirements` and run `streamlit run app.py`. To run the extracting code you would run the command `python setup.py install` then run the file `manual_download_usa_names.py` - this is because the extractor code is installed as a module.
 
